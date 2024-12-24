@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, FlatList } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
+import { LinearGradient } from 'expo-linear-gradient'; 
 import { ThemedText } from '@/components/ThemedText';
 import { Button, Card, Divider } from 'react-native-paper';
 
 const ExploreScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [data, setData] = useState([
-        { id: '1', title: 'Eiffel Tower, Paris', description: 'Discover the iconic Eiffel Tower, one of the world\'s most recognized landmarks, with breathtaking views of Paris.' },
-        { id: '2', title: 'Great Barrier Reef, Australia', description: 'Explore the world’s largest coral reef system, full of vibrant marine life and crystal-clear waters.' },
-        { id: '3', title: 'Machu Picchu, Peru', description: 'Experience the ancient Incan city of Machu Picchu, a UNESCO World Heritage site with rich history and breathtaking views.' },
-        { id: '4', title: 'Santorini, Greece', description: 'Known for its white-washed buildings, blue-domed churches, and stunning sunsets over the Aegean Sea.' },
-        { id: '5', title: 'Tokyo, Japan', description: 'Immerse yourself in the bustling metropolis of Tokyo, where tradition and technology meet in vibrant harmony.' },
-        { id: '6', title: 'Grand Canyon, USA', description: 'Explore the Grand Canyon’s natural beauty, offering spectacular views and adventurous activities in the heart of nature.' },
-        { id: '7', title: 'Kyoto, Japan', description: 'Visit Kyoto for its tranquil temples, stunning gardens, and traditional tea houses, especially during cherry blossom season.' },
-        { id: '8', title: 'Victoria Falls, Zimbabwe/Zambia', description: 'Witness the grandeur of Victoria Falls, one of the world’s largest and most spectacular waterfalls.' },
-        { id: '9', title: 'Bora Bora, French Polynesia', description: 'Relax in paradise with overwater bungalows, clear turquoise waters, and a peaceful atmosphere perfect for a getaway.' },
-        { id: '10', title: 'Rome, Italy', description: 'Walk through history in the Eternal City, with landmarks like the Colosseum, Roman Forum, and Vatican City.' },
+        { id: '1', title: 'Sate Maranggi', description: 'Sate khas Purwakarta yang lembut dan kaya rasa.', location: 'Purwakarta, Jawa Barat', rating: 4.8 },
+        { id: '2', title: 'Gudeg Yu Djum', description: 'Gudeg Jogja otentik yang manis dan gurih.', location: 'Yogyakarta, Jawa Tengah', rating: 4.7 },
+        { id: '3', title: 'Babi Guling Ibu Oka', description: 'Babi guling khas Bali dengan bumbu rempah yang kaya.', location: 'Ubud, Bali', rating: 4.6 },
+        { id: '4', title: 'Pempek Vico', description: 'Pempek Palembang dengan rasa autentik dan cuko khas.', location: 'Palembang, Sumatera Selatan', rating: 4.5 },
+        { id: '5', title: 'Ayam Betutu Men Tempeh', description: 'Ayam betutu Bali yang pedas dan kaya bumbu.', location: 'Gilimanuk, Bali', rating: 4.6 },
+        { id: '6', title: 'Rawon Setan', description: 'Rawon daging sapi khas Surabaya dengan kuah hitam gurih.', location: 'Surabaya, Jawa Timur', rating: 4.7 },
+        { id: '7', title: 'Soto Betawi Haji Ma’ruf', description: 'Soto Betawi yang gurih dengan daging empuk.', location: 'Jakarta Pusat, Jakarta', rating: 4.8 },
+        { id: '8', title: 'Rendang Mak Yus', description: 'Rendang Padang yang kaya bumbu dan lembut.', location: 'Padang, Sumatera Barat', rating: 4.9 },
+        { id: '9', title: 'Bakmi GM', description: 'Bakmi legendaris Jakarta dengan pangsit goreng favorit.', location: 'Jakarta, Jakarta', rating: 4.5 },
+        { id: '10', title: 'Ikan Bakar Jimbaran', description: 'Ikan bakar segar khas Bali dengan sambal matah.', location: 'Jimbaran, Bali', rating: 4.7 },
     ]);
     const [filteredData, setFilteredData] = useState(data);
 
@@ -28,20 +28,30 @@ const ExploreScreen = () => {
     };
 
     return (
-        <ThemedView style={styles.container}>
+        <LinearGradient
+            colors={['#ffe0b2', '#d7ccc8', '#5d4037']} 
+            style={styles.gradientBackground}
+        >
             <View style={styles.header}>
-                <ThemedText style={styles.welcomeText}>Welcome to Explore!</ThemedText>
-                <ThemedText style={styles.subText}>Discover new destinations and experiences</ThemedText>
+                <ThemedText style={styles.welcomeText}>Selamat Datang di Jelajah Rasa!</ThemedText>
+                <ThemedText style={styles.subText}>
+                    Temukan makanan khas Indonesia yang lezat dan unik
+                </ThemedText>
             </View>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
-                    placeholder="Search destinations..."
+                    placeholder="Cari makanan..."
                     value={searchText}
                     onChangeText={setSearchText}
+                    placeholderTextColor="#9e9e9e"
                 />
-                <Button mode="contained" onPress={handleSearch} style={styles.searchButton}>
-                    Search
+                <Button
+                    mode="contained"
+                    onPress={handleSearch}
+                    style={styles.searchButton}
+                >
+                    Cari
                 </Button>
             </View>
             <FlatList
@@ -52,23 +62,32 @@ const ExploreScreen = () => {
                         <Card.Title title={item.title} />
                         <Divider />
                         <Card.Content>
-                            <ThemedText style={styles.descriptionText}>{item.description}</ThemedText>
+                            <ThemedText style={styles.descriptionText}>
+                                {item.description}
+                            </ThemedText>
+                            <ThemedText style={styles.locationText}>
+                                Lokasi: {item.location}
+                            </ThemedText>
+                            <ThemedText style={styles.ratingText}>
+                                Rating: {item.rating} ★
+                            </ThemedText>
                         </Card.Content>
                     </Card>
                 )}
                 ListEmptyComponent={
-                    <ThemedText style={styles.emptyText}>No destinations found</ThemedText>
+                    <ThemedText style={styles.emptyText}>
+                        Tidak ada makanan yang ditemukan
+                    </ThemedText>
                 }
             />
-        </ThemedView>
+        </LinearGradient>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    gradientBackground: {
         flex: 1,
         padding: 16,
-        backgroundColor: '#f5f5f5',
     },
     header: {
         marginBottom: 20,
@@ -77,12 +96,13 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#d32f2f', 
     },
     subText: {
         fontSize: 16,
-        color: '#black',
+        color: '#5d4037', 
         marginTop: 8,
+        textAlign: 'center',
     },
     searchContainer: {
         flexDirection: 'row',
@@ -91,7 +111,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
-        borderColor: '#ddd',
+        borderColor: '#d32f2f', 
         borderWidth: 1,
         borderRadius: 8,
         padding: 10,
@@ -99,21 +119,34 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     searchButton: {
-        backgroundColor: '#64b5f6',
+        backgroundColor: '#d32f2f', 
     },
     card: {
         marginBottom: 16,
         borderRadius: 8,
         elevation: 3,
+        backgroundColor: '#ffe0b2', 
     },
     emptyText: {
         marginTop: 20,
         textAlign: 'center',
         fontSize: 16,
-        color: '#black',
+        color: '#5d4037',
     },
     descriptionText: {
-        color: '#000', // Set description text color to black
+        color: '#5d4037',
+        fontSize: 14,
+        marginTop: 8,
+    },
+    locationText: {
+        color: '#795548',
+        fontSize: 14,
+        marginTop: 4,
+    },
+    ratingText: {
+        color: '#d32f2f',
+        fontSize: 14,
+        marginTop: 4,
     },
 });
 

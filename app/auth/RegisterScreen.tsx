@@ -26,18 +26,19 @@ export default function RegisterScreen() {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.header}> {/* Added a centered header view */}
+			<View style={styles.header}>
 				<Image
 					source={require("../../assets/images/favicon1.png")}
 					style={styles.image}
 				/>
 				<Text style={styles.title}>Create an Account</Text>
-				<Text style={styles.subtitle}>Join us and get started</Text>
+				<Text style={styles.subtitle}>Join us with an amazing journey of exploration and growth!</Text>
 			</View>
 
 			<TextInput
 				style={styles.input}
 				placeholder="Username"
+				placeholderTextColor="#b399c1"
 				value={username}
 				onChangeText={setUsername}
 				autoCapitalize="none"
@@ -45,6 +46,7 @@ export default function RegisterScreen() {
 			<TextInput
 				style={styles.input}
 				placeholder="Email"
+				placeholderTextColor="#b399c1"
 				value={email}
 				onChangeText={setEmail}
 				keyboardType="email-address"
@@ -53,6 +55,7 @@ export default function RegisterScreen() {
 			<TextInput
 				style={styles.input}
 				placeholder="Password"
+				placeholderTextColor="#b399c1"
 				value={password}
 				onChangeText={setPassword}
 				secureTextEntry
@@ -77,74 +80,88 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#78B3CE",
+		justifyContent: "center",
+		alignItems: "center",
 		padding: 16,
+		backgroundColor: "#f8e6f4", 
 	},
 	header: {
 		alignItems: "center",
 		justifyContent: "center",
 		marginBottom: 32,
-		paddingTop: 50,
+		paddingTop: 20,
 	},
 	image: {
 		width: 120,
 		height: 120,
 		marginBottom: 16,
+		borderRadius: 60, 
+		borderWidth: 2,
+		borderColor: "#a85792",
 	},
 	title: {
 		fontSize: 28,
 		fontWeight: "bold",
-		color: "#1A1A19",
+		color: "#a85792",
 	},
 	subtitle: {
 		fontSize: 16,
-		color: "#64748B",
+		color: "#b399c1",
 	},
 	input: {
-		width: "100%",
-		height: 50,
-		borderColor: "#DFF2EB",
+		width: "90%",
+		height: 48,
+		borderColor: "#d6a3dc",
 		borderWidth: 1,
-		borderRadius: 8,
+		borderRadius: 24,
 		paddingHorizontal: 16,
 		marginBottom: 16,
-		backgroundColor: "#DFF2EB",
+		backgroundColor: "#ffffff",
 		fontSize: 16,
-		color: "#black",
-	},
-	registerButton: {
-		width: "100%",
-		height: 50,
-		backgroundColor: "#37AFE1",
-		borderRadius: 8,
-		justifyContent: "center",
-		alignItems: "center",
-		marginBottom: 16,
-		shadowColor: "#222",
+		color: "#6a11cb",
+		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.1,
+		shadowRadius: 3,
+		elevation: 2,
+	},
+	registerButton: {
+		width: "90%",
+		height: 48,
+		borderRadius: 24,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#a85792",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.2,
 		shadowRadius: 4,
-		color: "#37AFE1",
+		elevation: 4,
+		marginBottom: 16,
 	},
 	registerButtonText: {
-		color: "#54473F",
+		color: "#ffffff",
 		fontSize: 18,
 		fontWeight: "bold",
 	},
 	backButton: {
-		width: "100%",
-		height: 50,
-		borderColor: "#37AFE1",
-		backgroundColor: "#37AFE1",
-		borderWidth: 1,
-		borderRadius: 8,
+		width: "90%",
+		height: 48,
+		borderRadius: 24,
 		justifyContent: "center",
 		alignItems: "center",
-		color: "#37AFE1",
+		backgroundColor: "#ffffff",
+		borderColor: "#a85792",
+		borderWidth: 1,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.1,
+		shadowRadius: 3,
+		elevation: 2,
 	},
 	backButtonText: {
-		color: "#54473F",
+		color: "#a85792",
 		fontSize: 16,
-		fontWeight: "bold",
+		fontWeight: "600",
 	},
 });

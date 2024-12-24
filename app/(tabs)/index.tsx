@@ -20,6 +20,7 @@ import axios from 'axios';
 import API_URL from '@/config/config';
 import Constants from "expo-constants";
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const TodosScreen = () => {
     const { todos, fetchTodos } = useTodos();
@@ -29,7 +30,13 @@ const TodosScreen = () => {
     const [loading, setLoading] = useState(true);
     const [dialogVisible, setDialogVisible] = useState(false);
     const [dialogMessage, setDialogMessage] = useState('');
-    const [gradientAnimation, setGradientAnimation] = useState(new Animated.Value(0));
+    const gradientAnimation = useState(new Animated.Value(0))[0];
+
+    // Create animations for each logo
+    const iconMovementBottom = useState(new Animated.Value(0))[0]; // Bottom logo
+    const iconMovementTop = useState(new Animated.Value(0))[0]; // Top logo
+    const iconRotation = useState(new Animated.Value(0))[0]; // Rotating logo
+
     const router = useRouter();
 
     useEffect(() => {
@@ -40,29 +47,62 @@ const TodosScreen = () => {
         };
         loadTodos();
 
-       
-        const gradientColors = [
-            ['#B1F0F7', '#B4DA1A9', '#0A5EB0'],
-            ['#3D3BF3', '#4335A7', '#FFD700'],
-            ['#1F509A', '#FF8C00', '#B1F0F7']
-        ];
+        // Animated background gradient loop
+        Animated.loop(
+            Animated.sequence([  
+                Animated.timing(gradientAnimation, {
+                    toValue: 1,
+                    duration: 5000,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(gradientAnimation, {
+                    toValue: 0,
+                    duration: 5000,
+                    useNativeDriver: false,
+                }),
+            ])
+        ).start();
 
-        let index = 0;
-        const interval = setInterval(() => {
-            index = (index + 1) % gradientColors.length;
-            setGradientAnimation(new Animated.Value(0));
+        // 1. Bottom Logo Horizontal Animation
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(iconMovementBottom, {
+                    toValue: 1,
+                    duration: 3000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(iconMovementBottom, {
+                    toValue: 0,
+                    duration: 3000,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
 
-          
-            Animated.timing(gradientAnimation, {
+        // 2. Top Logo Horizontal Animation
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(iconMovementTop, {
+                    toValue: 1,
+                    duration: 3000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(iconMovementTop, {
+                    toValue: 0,
+                    duration: 3000,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
+
+        // 3. Rotation Animation for the last logo
+        Animated.loop(
+            Animated.timing(iconRotation, {
                 toValue: 1,
-                duration: 3000, 
-                useNativeDriver: false,
-            }).start();
-
-            
-            gradientAnimation.setValue(0); 
-        }, 3000); 
-        return () => clearInterval(interval); 
+                duration: 4000,
+                useNativeDriver: true,
+            })
+        ).start();
     }, []);
 
     const handleAddTodo = async () => {
@@ -98,27 +138,54 @@ const TodosScreen = () => {
         }
     };
 
+    const animatedBackground = gradientAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['rgba(255, 182, 193, 0.6)', 'rgba(255, 105, 180, 0.9)'],
+    });
+
+    // Interpolate icon movements
+    const iconTranslateXBottom = iconMovementBottom.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 300], // Moves from 0 to 300 (horizontal movement for bottom logo)
+    });
+
+    const iconTranslateXTop = iconMovementTop.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 300], // Moves from 0 to 300 (horizontal movement for top logo)
+    });
+
+    const iconRotationValue = iconRotation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'], // Rotates 360 degrees for the rotation logo
+    });
+
     return (
         <PaperProvider>
-            {}
-            <View style={styles.container}>
-            <LinearGradient
-    colors={['#E6E6FA', '#ADD8E6', '#98FF98']} // Lavender, Light Blue, Mint Green
-    start={{ x: 0, y: 0 }}
-    end={{ x: 1, y: 1 }}
-    style={[styles.background, {
-        transform: [
-            {
-                translateX: gradientAnimation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, 200],
-                }),
-            },
-        ],
-    }]}
-/>
-                
-                {/* Content */}
+            <Animated.View style={[styles.container, { backgroundColor: animatedBackground }]}>
+                {/* Icon 1: Center Logo (flower) */}
+                <MaterialCommunityIcons name="flower" size={100} color="rgba(255, 255, 255, 0.3)" style={styles.centerIcon} />
+
+                {/* Icon 2: Bottom Logo (leaf) */}
+                <Animated.View
+                    style={[styles.backgroundIcon, { transform: [{ translateX: iconTranslateXBottom }] }, { bottom: 10 }]}
+                >
+                    <MaterialCommunityIcons name="leaf" size={100} color="rgba(255, 255, 255, 0.3)" />
+                </Animated.View>
+
+                {/* Icon 3: Top Logo (flower-tulip) */}
+                <Animated.View
+                    style={[styles.backgroundIcon, { transform: [{ translateX: iconTranslateXTop }] }, { top: 10 }]}
+                >
+                    <MaterialCommunityIcons name="flower-tulip" size={100} color="rgba(255, 255, 255, 0.3)" />
+                </Animated.View>
+
+                {/* Icon 4: Rotating Logo (pine-tree) */}
+                <Animated.View
+                    style={[styles.backgroundIcon, { transform: [{ rotate: iconRotationValue }] }, { right: 0 }]}
+                >
+                    <MaterialCommunityIcons name="pine-tree" size={100} color="rgba(255, 255, 255, 0.3)" />
+                </Animated.View>
+
                 <ThemedView style={styles.innerContainer}>
                     <ThemedText style={styles.title} type="title">ToDo List</ThemedText>
                     {loading ? (
@@ -164,7 +231,7 @@ const TodosScreen = () => {
                         </Dialog>
                     </Portal>
                 </ThemedView>
-            </View>
+            </Animated.View>
         </PaperProvider>
     );
 };
@@ -176,25 +243,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         backgroundColor: 'transparent', 
     },
-    background: {
-        ...StyleSheet.absoluteFillObject,
-        position: 'absolute',
-        zIndex: -1, 
-        borderRadius: 10,
-    },
     innerContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1,
         backgroundColor: 'transparent',
     },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
         marginTop: 20,
-        color: '#333',
+        color: '#white',
         textAlign: 'center',
+    },
+    backgroundIcon: {
+        position: 'absolute',
+    },
+    centerIcon: {
+        alignSelf: 'center',
     },
     listContainer: {
         paddingVertical: 10,
@@ -202,32 +268,27 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 16,
         borderRadius: 10,
-        backgroundColor: '#ffffff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 6,
-        elevation: 5,
+        backgroundColor: 'transparent', 
     },
     cardTitle: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#333',
+        color: '#FF69B4',
     },
     description: {
-        color: 'gray',
+        color: '#FF1493',
         fontSize: 16,
         marginTop: 8,
     },
     deleteButton: {
-        backgroundColor: '#FF6347',
+        backgroundColor: '#FF6B6B',
         borderRadius: 5,
     },
     fab: {
         position: 'absolute',
         right: 16,
         bottom: 16,
-        backgroundColor: '#FFD700',
+        backgroundColor: '#FF69B4',
         elevation: 6,
     },
     inputContainer: {
@@ -242,10 +303,11 @@ const styles = StyleSheet.create({
     },
     addButton: {
         marginTop: 16,
+        backgroundColor: '#FF69B4',
     },
     cancelButton: {
         marginTop: 8,
-        backgroundColor: '#DCDCDC',
+        backgroundColor: '#FFD1DC',
     },
     loading: {
         flex: 1,
@@ -257,10 +319,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     dialogButton: {
-        backgroundColor: '#28a745',
+        backgroundColor: '#FF69B4',
         borderRadius: 5,
     },
-    
 });
 
 export default TodosScreen;

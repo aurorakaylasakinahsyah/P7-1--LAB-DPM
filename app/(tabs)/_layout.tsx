@@ -2,9 +2,9 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons, MaterialIcons, Feather } from '@expo/vector-icons'; 
 
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -16,12 +16,12 @@ export default function TabLayout() {
         <Tabs
             screenOptions={({ route }) => ({
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-                tabBarInactiveTintColor: 'black',
+                tabBarInactiveTintColor: 'gray',
                 headerShown: false,
                 tabBarButton: HapticTab,
                 tabBarBackground: () => (
                     <LinearGradient
-                        colors={['#B0BEC5', '#64B5F6']}
+                        colors={['#F8BBD0', '#F48FB1']} 
                         style={{ flex: 1, borderRadius: 20 }}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
@@ -37,39 +37,40 @@ export default function TabLayout() {
                         elevation: 5,
                     },
                     default: {
-                        backgroundColor: '#E0E0E0',
+                        backgroundColor: '#F8BBD0', 
                         borderRadius: 20,
                     },
                 }),
                 tabBarIcon: ({ focused, color }) => {
+                    let IconComponent;
                     let iconName;
-                    let iconColor = color; // Default icon color
 
-                    // Custom logic for "Explore" tab
-                    if (route.name === 'explore') {
-                        iconColor = focused ? color : 'white'; // Set to white when not focused
-                    }
-
+                   
                     switch (route.name) {
                         case 'index':
-                            iconName = 'list.fill';
+                            IconComponent = Ionicons; 
+                            iconName = focused ? 'checkmark-done-circle' : 'checkmark-circle-outline';
                             break;
                         case 'profile':
-                            iconName = 'person.fill';
+                            IconComponent = MaterialIcons; 
+                            iconName = focused ? 'person' : 'person-outline';
                             break;
                         case 'explore':
-                            iconName = 'map.fill';
+                            IconComponent = Feather;
+                            iconName = focused ? 'map-pin' : 'map';
                             break;
                         default:
-                            iconName = 'circle';
+                            IconComponent = Ionicons;
+                            iconName = 'help-circle';
                     }
 
+                    
                     const scale = new Animated.Value(focused ? 1.2 : 1);
                     Animated.spring(scale, { toValue: focused ? 1.3 : 1, useNativeDriver: true }).start();
 
                     return (
                         <Animated.View style={{ transform: [{ scale }] }}>
-                            <IconSymbol size={30} name={iconName} color={iconColor} />
+                            <IconComponent name={iconName} size={28} color={color} />
                         </Animated.View>
                     );
                 },
@@ -82,19 +83,19 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: 'Todos',
+                    title: 'Todo List', 
                 }}
             />
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: 'Profile',
+                    title: 'Profile', 
                 }}
             />
             <Tabs.Screen
                 name="explore"
                 options={{
-                    title: 'Explore',
+                    title: 'Explore', 
                 }}
             />
         </Tabs>
